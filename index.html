@@ -19,6 +19,21 @@
 			*{box-sizing:border-box}
 			html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:#e6eef8;background:linear-gradient(180deg,var(--bg),#071028 80%)}
 			.container{max-width:980px;margin:40px auto;padding:24px}
+			/* Animated background blobs */
+			.bg-blobs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+			.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.6;transform:translate3d(0,0,0)}
+			.blob.a{width:360px;height:360px;background:radial-gradient(circle at 30% 30%, #7c3aed, #4f46e5);left:-80px;top:-60px;animation:moveA 12s ease-in-out infinite}
+			.blob.b{width:420px;height:420px;background:radial-gradient(circle at 70% 70%, #06b6d4, #0ea5a4);right:-120px;top:40%;animation:moveB 14s ease-in-out infinite}
+			.blob.c{width:260px;height:260px;background:radial-gradient(circle at 50% 50%, #f97316, #fb7185);left:10%;bottom:-80px;animation:moveC 16s ease-in-out infinite}
+			@keyframes moveA{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(30px) translateX(30px)}100%{transform:translateY(0) translateX(0)}}
+			@keyframes moveB{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-40px) translateX(-20px)}100%{transform:translateY(0) translateX(0)}}
+			@keyframes moveC{0%{transform:translateY(0) translateX(0)}50%{transform:translateY(-20px) translateX(40px)}100%{transform:translateY(0) translateX(0)}}
+
+			/* Header typing effect */
+			.motto{color:#f8fafc;margin-top:8px;font-weight:600}
+			.typing{display:inline-block;border-right:2px solid rgba(255,255,255,0.12);white-space:nowrap;overflow:hidden}
+			@keyframes blinkCaret{50%{border-color:transparent}}
+			.typing.cursor{animation:blinkCaret 1s steps(1) infinite}
 			.hero{display:flex;gap:24px;align-items:center}
 			.badge{background:linear-gradient(90deg,var(--accent),#06b6d4);color:white;padding:6px 12px;border-radius:999px;font-weight:700;font-size:13px}
 			h1{font-family:'Roboto Slab', serif;font-size:48px;line-height:1.02;margin:0;color:white}
@@ -40,7 +55,53 @@
 		</style>
 	</head>
 	<body>
-		<div class="container">
+			<div class="bg-blobs" aria-hidden="true">
+				<div class="blob a"></div>
+				<div class="blob b"></div>
+				<div class="blob c"></div>
+			</div>
+
+			<div class="container">
+				<!-- Personal intro for UPADHYAYA BIJAY -->
+				<section class="card" style="position:relative;z-index:1;margin-bottom:18px">
+					<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+						<div style="width:96px;height:96px;border-radius:18px;background:linear-gradient(135deg,#0ea5a4,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:28px">UB</div>
+						<div>
+							<div style="font-size:13px;color:var(--muted);font-weight:700">Hi, I’m</div>
+							<h1 style="margin:6px 0 6px;font-size:40px;line-height:1">UPADHYAYA <span class="name">BIJAY</span></h1>
+							<div class="motto"> <span class="typing cursor" id="typingMotto"></span> </div>
+							<div style="margin-top:8px;color:var(--muted)">Student • 20 years old • Proud Hindu</div>
+						</div>
+					</div>
+
+					<div style="margin-top:12px;color:var(--muted);line-height:1.6">
+						<strong>🌱 About Me</strong>
+						<p style="margin:6px 0">I’m a student still figuring out my path — skills: not unlocked yet! Curious, open-minded, and ready to explore the world (and maybe my talents too).</p>
+						<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px">
+							<div style="background:var(--glass);padding:10px;border-radius:10px;font-weight:700">🎂 Age: 20</div>
+							<div style="background:var(--glass);padding:10px;border-radius:10px;font-weight:700">🕉️ Proud Hindu</div>
+							<div style="background:var(--glass);padding:10px;border-radius:10px;font-weight:700">🔮 Looking for my passion</div>
+						</div>
+					</div>
+
+					<hr style="border:none;border-top:1px solid rgba(255,255,255,0.04);margin:12px 0">
+					<div style="display:flex;gap:18px;flex-wrap:wrap">
+						<div style="flex:1;min-width:220px">
+							<strong>✨ Fun Facts</strong>
+							<ul style="color:var(--muted);margin-top:8px">
+								<li>I believe every day is a new level to beat.</li>
+								<li>My skill tree is wide open — surprises to come!</li>
+								<li>You’ll find me searching for meaning, purpose, and maybe cool side quests.</li>
+							</ul>
+						</div>
+						<div style="min-width:260px">
+							<strong>📚 Student Life</strong>
+							<p style="color:var(--muted);margin-top:8px">Currently on a journey of self-discovery. Not sure what’s next, but excited to see where it leads!</p>
+							<strong style="display:block;margin-top:10px">📬 Let’s Connect</strong>
+							<p style="color:var(--muted);margin-top:6px">(Add your social links here if you want)</p>
+						</div>
+					</div>
+				</section>
 			<div class="hero">
 				<div>
 					<div class="badge">Builder • Learner</div>
@@ -192,8 +253,36 @@
 				if(e.key.toLowerCase()==='g') goalInput.focus();
 			});
 
-			// init
-			loadSaved();
+					// typing effect for the motto
+					const mottoPhrases = [
+						'"Still loading… please wait!"',
+						'Curious. Open-minded. Ready to explore.',
+						'Student. Builder in progress.'
+					];
+					const typingEl = document.getElementById('typingMotto');
+					function typeLoop(i=0, j=0){
+						const str = mottoPhrases[i];
+						if(j <= str.length){
+							typingEl.textContent = str.slice(0,j);
+							setTimeout(()=> typeLoop(i, j+1), 45);
+						} else {
+							// hold, then delete
+							setTimeout(()=> erase(i, str.length-1), 900);
+						}
+					}
+					function erase(i, j){
+						const str = mottoPhrases[i];
+						if(j >= 0){
+							typingEl.textContent = str.slice(0,j);
+							setTimeout(()=> erase(i, j-1), 25);
+						} else {
+							setTimeout(()=> typeLoop((i+1) % mottoPhrases.length, 0), 300);
+						}
+					}
+
+					// init
+					loadSaved();
+					if(typingEl) typeLoop();
 		</script>
 	</body>
 </html>
